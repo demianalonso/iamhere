@@ -9,8 +9,9 @@ public class PlaceTracker {
     private List<Place> places = new ArrayList<>();
 
     private boolean hasChanged = false;
-    public PlaceTracker() {
-        places.add(new Place());
+
+    public PlaceTracker(GeofenceListener listener) {
+        places.add(new Place(listener));
     }
 
     public void onLocationChanged(Location location) {

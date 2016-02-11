@@ -10,8 +10,11 @@ public class Place {
     private Location center;
     private double radiusInMeters;
     private boolean isInside = false;
+    private GeofenceListener geofenceListener;
 
-    public Place() {
+    public Place(GeofenceListener listener) {
+        geofenceListener = listener;
+
         center = new Location("fixedprovider");
         center.setLatitude(-34.602612);
         center.setLongitude(-58.454544);
@@ -24,6 +27,14 @@ public class Place {
     public boolean updateIsInside(boolean isInside) {
         boolean hasChanged = this.isInside != isInside;
         this.isInside = isInside;
+        if(hasChanged) {
+            if(isInside) {
+                geofenceListener.onEnterGeofence(this);
+            }
+            else {
+                geofenceListener.onLeaveGeofence(this);
+            }
+        }
         return hasChanged;
     }
 
@@ -45,5 +56,13 @@ public class Place {
 
     public boolean isInside() {
         return isInside;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getMessage() {
+        return (this.isInside() ? "Entre a " : "Sali de ")  + this.getName() + " desde Android!" ;
     }
 }
